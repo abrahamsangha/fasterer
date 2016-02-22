@@ -48,12 +48,11 @@ module Fasterer
 
     def scan_by_token(token, element)
       case token
-      when :defn
+      when :defn, :block
         scan_method_definitions(element)
+        scan_sequential_assignment(element)
       when :call, :iter
         scan_method_calls(element)
-      when :masgn
-        scan_parallel_assignment(element)
       when :for
         scan_for_loop(element)
       when :resbody
@@ -77,8 +76,11 @@ module Fasterer
       end
     end
 
-    def scan_parallel_assignment(element)
-      errors.push(Fasterer::Offense.new(:parallel_assignment, element.line))
+    def scan_sequential_assignment(element)
+      sequential_assignment_scanner = SequentialAssignmentScanner.new(element)
+      if sequential_assignment_scanner.offense_detected?
+        errors.push(Fasterer::Offense.new(:sequential_assignment, element.line))
+      end
     end
 
     def scan_for_loop(element)

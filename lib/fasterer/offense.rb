@@ -16,8 +16,8 @@ module Fasterer
     end
 
     EXPLANATIONS = {
-      parallel_assignment:
-        'Parallel assignment is slower than sequential assignment',
+      sequential_assignment:
+        'Sequential assignment is slower than parallel assignment',
 
       rescue_vs_respond_to:
         'Don\'t rescue NoMethodError, rather check with respond_to?',
